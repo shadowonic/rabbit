@@ -1,0 +1,21 @@
+{
+  "name": "test-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node app/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "shadow",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/amqplib": "^0.5.13",
+    "@types/node": "^13.13.2",
+    "ts-node": "^8.9.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "amqplib": "^0.5.5"
+  }
+}
