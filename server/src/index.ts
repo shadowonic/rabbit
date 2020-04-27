@@ -1,23 +1,23 @@
 import * as amqp from 'amqplib/callback_api'
+import { rabbitConnUrl } from './config'
 let DB: { [key: string]: string } = {}
 let rabbConn: amqp.Connection
+
+console.log(rabbitConnUrl);
+
 function start() {
-        amqp.connect('amqp://rabbitmq:rabbitmq@rabbit1:5672', (err, conn) => {
-            if (err) {
-                console.log('Connection failed. Reconnect in 1000ms');
+    // return
+    amqp.connect(rabbitConnUrl, (err, conn) => {
+        if (err) {
+            console.log('Connection failed. Reconnect in 1000ms');
+            return
+        }
+        console.log('Connected');
 
+        rabbConn = conn
+        createChannels()
+    })
 
-                setTimeout(() => {
-                    start()
-                }, 1000);
-                return
-            }
-            console.log('Connected');
-
-            rabbConn = conn
-            createChannels()
-        })
-   
     function createChannels() {
         if (!rabbConn) {
             throw new Error('no Rabbit connection')
@@ -180,7 +180,6 @@ function start() {
         })
     }
 }
-
 start()
 
 

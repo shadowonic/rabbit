@@ -1,25 +1,24 @@
 version: "3"
 
 services:
-  app:
-    image: node:latest
-    build: .
-    volumes:
-      - ".:/src"
-    command: npm start
-    depends_on:
-      - rabbit1
-  rabbit1:
+  rabbit:
     image: "rabbitmq:3-management"
-    hostname: "rabbit1"
+    hostname: ${RABBIT_HOSTNAME}
+    env_file: ".env"
     environment:
-      RABBITMQ_DEFAULT_USER: "rabbitmq"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_USER: ${RABBIT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_PASS}
       RABBITMQ_DEFAULT_VHOST: "/"
     ports:
       - "15672:15672"
       - "5672:5672"
-   
     labels:
-      NAME: "rabbitmq1"
-   
+      NAME: "rabbitmq"
+  server:
+    build: server/
+    image: server
+    env_file: ".env"
+    command: ./wait-for.sh rabbit:15672 -- npm run start
+    # restart: unless-stopped
+    depends_on: 
+      - rabbit
